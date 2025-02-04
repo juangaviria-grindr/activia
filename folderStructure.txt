@@ -1,0 +1,13 @@
+📦 com.activia
+ ┣ 📂 config          → Configuración global (DB, CORS, seguridad, etc.)
+ ┣ 📂 controllers     → Controladores REST (endpoints de la API)
+ ┣ 📂 services        → Lógica de negocio y validaciones
+ ┣ 📂 repositories    → Interfaces de acceso a datos con Spring Data JPA
+ ┣ 📂 models          → Clases de dominio y entidades JPA
+ ┃ ┣ 📂 entities      → Entidades JPA (persistencia)
+ ┃ ┣ 📂 dto           → Data Transfer Objects (clases para requests/responses)
+ ┃ ┗ 📂 enums         → Enumeraciones utilizadas en el modelo de datos
+ ┣ 📂 exceptions      → Manejo de errores y excepciones personalizadas
+ ┣ 📂 security        → Configuración de autenticación y seguridad (JWT, roles)
+ ┣ 📂 utils           → Funciones auxiliares y clases de ayuda
+ ┗ 📜 ActiviaApplication.kt   → Clase principal de la aplicación

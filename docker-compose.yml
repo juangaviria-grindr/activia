@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: activia-db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: activia
+      POSTGRES_USER: activia_user
+      POSTGRES_PASSWORD: activia_pass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+    driver: local
