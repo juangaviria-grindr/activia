@@ -38,6 +38,9 @@ class JwtAuthenticationFilter(private val jwtUtil: JwtUtil) : OncePerRequestFilt
                )
                authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
                SecurityContextHolder.getContext().authentication = authToken
+            } else {
+               response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token")
+               return
             }
          } catch (e: ExpiredJwtException) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired")

@@ -36,4 +36,14 @@ class GlobalExceptionHandler {
    fun handleGenericException(ex: Exception): ResponseEntity<String> {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred")
    }
+
+   @ExceptionHandler(UnauthorizedException::class)
+   fun handleUnauthorizedException(ex: UnauthorizedException): ResponseEntity<String> {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.message)
+   }
+
+   @ExceptionHandler(ForbiddenException::class)
+   fun handleForbiddenException(ex: ForbiddenException): ResponseEntity<String> {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.message)
+   }
 }

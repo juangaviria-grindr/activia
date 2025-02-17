@@ -1,6 +1,7 @@
 package com.gaviria.activia.models.entities
 
 import com.gaviria.activia.models.enums.UserRole
+import com.gaviria.activia.models.enums.UserStatus
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -14,14 +15,17 @@ import jakarta.persistence.Table
 @Table(name = "users")
 data class User(
    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-   val id: Long? = null,
+   val id: Long = 0,
 
    @Column(nullable = false, unique = true)
-   val email: String,
+   var email: String,
 
    @Column(nullable = false)
-   val passwordHash: String,
+   var passwordHash: String,
 
    @Enumerated(EnumType.STRING)
-   val role: UserRole
+   var role: UserRole,
+
+   @Enumerated(EnumType.STRING)
+   var status: UserStatus
 )
