@@ -8,6 +8,7 @@ import com.gaviria.activia.models.entities.User
 import com.gaviria.activia.models.enums.UserStatus
 import com.gaviria.activia.services.UserService
 import jakarta.validation.Valid
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -23,11 +24,13 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/users")
 class UserControllerV1(private val userService: UserService) {
 
+   @PreAuthorize("hasRole('ADMIN')")
    @PostMapping
    fun createUser(@Valid @RequestBody request: CreateUserRequestV1): UserResponseV1 {
       return userService.createUser(request.email, request.role, request.password).toUserResponseV1()
    }
 
+   @PreAuthorize("hasRole('ADMIN')")
    @GetMapping
    fun getUsers(@RequestParam(required = false) status: UserStatus?): List<UserResponseV1> {
       return if (status != null) {
@@ -37,16 +40,19 @@ class UserControllerV1(private val userService: UserService) {
       }
    }
 
+   @PreAuthorize("hasRole('ADMIN')")
    @DeleteMapping("/{id}")
    fun inactiveUser(@PathVariable id: Long) {
       userService.inactiveUser(id)
    }
 
+   @PreAuthorize("hasRole('ADMIN')")
    @PatchMapping("/{id}/activate")
    fun activeUser(@PathVariable id: Long) {
       userService.activeUser(id)
    }
 
+   @PreAuthorize("hasRole('ADMIN')")
    @PutMapping("/{id}")
    fun updateUser(@PathVariable id: Long, @RequestBody request: UpdateUserRequestV1) {
       userService.updateUser(id, request.email, request.role, request.password, request.status)

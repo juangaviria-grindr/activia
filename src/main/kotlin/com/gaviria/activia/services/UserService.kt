@@ -1,6 +1,9 @@
 package com.gaviria.activia.services
 
 import com.gaviria.activia.exceptions.BusinessException
+import com.gaviria.activia.exceptions.InactiveUserException
+import com.gaviria.activia.exceptions.ResourceNotFoundException
+import com.gaviria.activia.exceptions.UnauthorizedException
 import com.gaviria.activia.models.entities.User
 import com.gaviria.activia.models.enums.UserRole
 import com.gaviria.activia.models.enums.UserStatus
@@ -50,11 +53,13 @@ class UserService(
       userRepository.save(user)
    }
 
-   fun validateUserPassword(email: String, rawPassword: String): Boolean {
-      val user = userRepository.findByEmail(email) ?: return false
-      if (user.status != UserStatus.ACTIVE) {
-         return false
+   fun validateUserPassword(email: String, rawPassword: String): Result<User> {
+      val user = userRepository.findByEmail(email) ?: return Result.failure(UnauthorizedException("Credenciales Invalidas"))
+
+      return when {
+         user.status != UserStatus.ACTIVE -> Result.failure(InactiveUserException("User is not active"))
+         !passwordEncoder.matches(rawPassword, user.passwordHash) -> Result.failure(UnauthorizedException("Credenciales Invalidas"))
+         else -> Result.success(user)
       }
-      return passwordEncoder.matches(rawPassword, user.passwordHash)
    }
 }

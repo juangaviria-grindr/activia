@@ -8,6 +8,7 @@ import com.gaviria.activia.models.enums.EmployeeStatus
 import com.gaviria.activia.services.EmployeeService
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/v1/employees")
 class EmployeeController(private val employeeService: EmployeeService) {
 
+   @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
    @GetMapping
    fun getAllEmployees(@RequestParam(required = false) status: EmployeeStatus?): List<EmployeeResponseV1> {
       return if (status != null) {
@@ -32,6 +34,7 @@ class EmployeeController(private val employeeService: EmployeeService) {
       }
    }
 
+   @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
    @GetMapping("/{id}")
    fun getEmployeeById(@PathVariable id: Long): ResponseEntity<EmployeeResponseV1> {
       return employeeService.getEmployeeById(id)?.let {
@@ -39,6 +42,7 @@ class EmployeeController(private val employeeService: EmployeeService) {
       } ?: ResponseEntity.notFound().build()
    }
 
+   @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
    @PostMapping
    fun createEmployee(@Valid @RequestBody request: CreateEmployeeRequestV1): EmployeeResponseV1 {
       return employeeService.createEmployee(
@@ -46,6 +50,7 @@ class EmployeeController(private val employeeService: EmployeeService) {
       ).toEmployeeResponseV1()
    }
 
+   @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
    @PutMapping("/{id}")
    fun updateEmployee(
       @PathVariable id: Long,
@@ -55,6 +60,7 @@ class EmployeeController(private val employeeService: EmployeeService) {
       return ResponseEntity.ok(employee.toEmployeeResponseV1())
    }
 
+   @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
    @DeleteMapping("/{id}")
    fun deactivateEmployee(@PathVariable id: Long): ResponseEntity<Unit> {
       return employeeService.deactivateEmployee(id).let {
@@ -62,6 +68,7 @@ class EmployeeController(private val employeeService: EmployeeService) {
       }
    }
 
+   @PreAuthorize("hasAnyRole('ADMIN', 'SUPERVISOR')")
    @PatchMapping("/{id}/activate")
    fun activateEmployee(@PathVariable id: Long): ResponseEntity<Unit> {
       return employeeService.activateEmployee(id).let {

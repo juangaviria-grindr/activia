@@ -3,6 +3,7 @@ package com.gaviria.activia.exceptions
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authorization.AuthorizationDeniedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -44,6 +45,16 @@ class GlobalExceptionHandler {
 
    @ExceptionHandler(ForbiddenException::class)
    fun handleForbiddenException(ex: ForbiddenException): ResponseEntity<String> {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.message)
+   }
+
+   @ExceptionHandler(InactiveUserException::class)
+   fun handleInactiveUserException(ex: InactiveUserException): ResponseEntity<String> {
+      return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.message)
+   }
+
+   @ExceptionHandler(AuthorizationDeniedException::class)
+   fun handleAuthorizationDeniedException(ex: AuthorizationDeniedException): ResponseEntity<String> {
       return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.message)
    }
 }
